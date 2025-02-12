@@ -38,8 +38,26 @@ int main()
         return 0;
     }
 
-    // do what?
+    sockaddr_in clientAddr{};
+    int clientAddrSize = sizeof(clientAddr);
+    char buffer[1024];
 
+    while (true)
+    {
+        int recvSize = recvfrom(sock, buffer, sizeof(buffer), 0, (sockaddr*)&clientAddr, &clientAddrSize);
+        if (recvSize == SOCKET_ERROR)
+        {
+            cout << "recvfrom failed" << WSAGetLastError() << std::endl;
+            break;
+        }
+
+        cout << "recvfrom: " << buffer << std::endl;
+        if (sendto(sock, buffer, recvSize, 0, (sockaddr*)&clientAddr, clientAddrSize) == SOCKET_ERROR)
+        {
+            cout << "sendto failed" << WSAGetLastError() << std::endl;
+            break;
+        }
+    }
 
     closesocket(sock);
     WSACleanup();
