@@ -44,9 +44,40 @@ int main()
 		WSACleanup();
 		return 0;
 	}
+	
+	constexpr int bufferSize = 1024;
+	char buffer[bufferSize];
+	sockaddr_in clientAddr = {};
+	int clientAddrSize = sizeof(clientAddr);
 
-	// do what?
+	constexpr int maxPuncherCount = 10;
+	for (int i = 0; i < maxPuncherCount; ++i)
+	{
+		if (sendto(sock, "Hello", 5, 0, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+		{
+			cout << "sendto failed" << WSAGetLastError() << std::endl;
+			break;
+		}
+	}
 
+	while (true)
+	{
+		int recvSize = recvfrom(sock, buffer, sizeof(buffer), 0, (sockaddr*)&clientAddr, &clientAddrSize);
+		if (recvSize == SOCKET_ERROR)
+		{
+			cout << "recvfrom failed" << WSAGetLastError() << std::endl;
+			break;
+		}
+
+		if (bufferSize <= recvSize)
+		{
+			cout << "buffer is over with recv size " << recvSize << std::endl;
+			break;
+		}
+
+		buffer[recvSize] = '\0';
+		cout << "recvfrom: " << buffer << std::endl;
+	}
 
 	closesocket(sock);
 	WSACleanup();
