@@ -38,9 +38,10 @@ int main()
         return 0;
     }
 
+    constexpr int bufferSize = 1024;
+    char buffer[bufferSize];
     sockaddr_in clientAddr{};
     int clientAddrSize = sizeof(clientAddr);
-    char buffer[1024];
 
     while (true)
     {
@@ -48,6 +49,12 @@ int main()
         if (recvSize == SOCKET_ERROR)
         {
             cout << "recvfrom failed" << WSAGetLastError() << std::endl;
+            break;
+        }
+
+        if (bufferSize <= recvSize)
+        {
+            cout << "buffer is over with recv size " << recvSize << std::endl;
             break;
         }
 
