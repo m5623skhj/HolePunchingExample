@@ -60,6 +60,8 @@ int main()
 		}
 	}
 
+	std::cout << "Client started" << std::endl;
+
 	while (true)
 	{
 		int recvSize = recvfrom(sock, buffer, sizeof(buffer), 0, (sockaddr*)&clientAddr, &clientAddrSize);

@@ -43,6 +43,8 @@ int main()
     sockaddr_in clientAddr{};
     int clientAddrSize = sizeof(clientAddr);
 
+	std::cout << "Server started" << std::endl;
+
     while (true)
     {
         int recvSize = recvfrom(sock, buffer, sizeof(buffer), 0, (sockaddr*)&clientAddr, &clientAddrSize);
@@ -52,6 +54,7 @@ int main()
             break;
         }
 
+		buffer[recvSize] = '\0';
         if (bufferSize <= recvSize)
         {
             cout << "buffer is over with recv size " << recvSize << std::endl;
