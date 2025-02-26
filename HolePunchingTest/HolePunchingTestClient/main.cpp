@@ -2,6 +2,7 @@
 #include <ws2tcpip.h>
 #include <iostream>
 #include <string>
+#include <thread>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -10,6 +11,8 @@ constexpr const char* serverIp = "127.0.0.1";
 
 bool TryHolepunching(SOCKET sock, sockaddr_in& serverAddr, const int timeoutMs, const int maxPuncherCount)
 {
+	constexpr int holepunchingTrySleepMs = 100;
+
 	for (int i = 0; i < maxPuncherCount; ++i)
 	{
 		if (sendto(sock, "Hello", 5, 0, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
@@ -17,6 +20,8 @@ bool TryHolepunching(SOCKET sock, sockaddr_in& serverAddr, const int timeoutMs, 
 			std::cout << "sendto failed" << WSAGetLastError() << std::endl;
 			return false;
 		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(holepunchingTrySleepMs));
 	}
 
 	fd_set fdSet;
