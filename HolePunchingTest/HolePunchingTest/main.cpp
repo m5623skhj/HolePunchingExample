@@ -52,12 +52,13 @@ int main()
             break;
         }
 
-		buffer[recvSize] = '\0';
-        if (bufferSize <= recvSize)
+        if (recvSize >= bufferSize)
         {
-            std::cout << "buffer is over with recv size " << recvSize << std::endl;
-            break;
+			std::cout << "Recv size is too big " << recvSize << std::endl;
+			continue;
         }
+
+        buffer[recvSize] = '\0';
 
         std::cout << "recvfrom: " << buffer << std::endl;
         if (sendto(sock, buffer, recvSize, 0, (sockaddr*)&clientAddr, clientAddrSize) == SOCKET_ERROR)
