@@ -12,14 +12,14 @@ std::pair<std::string, short> GetPublicIp()
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
-		std::cout << "WSAStartup failed" << WSAGetLastError() << std::endl;
+		std::cout << "WSAStartup failed " << WSAGetLastError() << std::endl;
 		return { "0.0.0.0", 0 };
 	}
 
 	SOCKET sock = socket(AF_INET, SOCK_DGRAM, 0);
 	if (sock == INVALID_SOCKET)
 	{
-		std::cout << "socket failed" << WSAGetLastError() << std::endl;
+		std::cout << "socket failed " << WSAGetLastError() << std::endl;
 		WSACleanup();
 		return { "0.0.0.0", 0 };
 	}
@@ -39,7 +39,7 @@ std::pair<std::string, short> GetPublicIp()
 
 	if (sendto(sock, stunRequest, sizeof(stunRequest), 0, (sockaddr*)&stunServerAddr, sizeof(stunServerAddr)) == SOCKET_ERROR)
 	{
-		std::cout << "sendto failed" << WSAGetLastError() << std::endl;
+		std::cout << "sendto failed " << WSAGetLastError() << std::endl;
 		closesocket(sock);
 		WSACleanup();
 		return { "0.0.0.0", 0 };
@@ -52,7 +52,7 @@ std::pair<std::string, short> GetPublicIp()
 	int recvSize = recvfrom(sock, buffer, sizeof(buffer), 0, (sockaddr*)&addr, &clientAddrSize);
 	if (recvSize == SOCKET_ERROR)
 	{
-		std::cout << "recvfrom failed" << WSAGetLastError() << std::endl;
+		std::cout << "recvfrom failed " << WSAGetLastError() << std::endl;
 		closesocket(sock);
 		WSACleanup();
 		return { "0.0.0.0", 0 };
