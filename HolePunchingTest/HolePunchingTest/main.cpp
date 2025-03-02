@@ -1,4 +1,4 @@
-#include <winsock2.h>
+  #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iostream>
 
@@ -11,14 +11,14 @@ int main()
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
-        std::cout << "WSAStartup failed" << WSAGetLastError() << std::endl;
+        std::cout << "WSAStartup failed " << WSAGetLastError() << std::endl;
         return 0;
     }
 
     SOCKET sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (sock == INVALID_SOCKET)
     {
-        std::cout << "socket failed" << WSAGetLastError() << std::endl;
+        std::cout << "socket failed " << WSAGetLastError() << std::endl;
         WSACleanup();
         return 0;
     }
@@ -30,7 +30,7 @@ int main()
 
     if (bind(sock, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
     {
-        std::cout << "bind failed" << WSAGetLastError() << std::endl;
+        std::cout << "bind failed " << WSAGetLastError() << std::endl;
         closesocket(sock);
         WSACleanup();
         return 0;
@@ -48,7 +48,7 @@ int main()
         int recvSize = recvfrom(sock, buffer, sizeof(buffer), 0, (sockaddr*)&clientAddr, &clientAddrSize);
         if (recvSize == SOCKET_ERROR)
         {
-            std::cout << "recvfrom failed" << WSAGetLastError() << std::endl;
+            std::cout << "recvfrom failed " << WSAGetLastError() << std::endl;
             break;
         }
 
@@ -63,7 +63,7 @@ int main()
         std::cout << "recvfrom: " << buffer << std::endl;
         if (sendto(sock, buffer, recvSize, 0, (sockaddr*)&clientAddr, clientAddrSize) == SOCKET_ERROR)
         {
-            std::cout << "sendto failed" << WSAGetLastError() << std::endl;
+            std::cout << "sendto failed " << WSAGetLastError() << std::endl;
             break;
         }
     }
